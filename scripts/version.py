@@ -41,7 +41,7 @@ class GitVersion:
             or "unknown"
         )
 
-        version = tag or "mntm-dev"
+        version = tag or "botirocky-dev"
 
         if "SOURCE_DATE_EPOCH" in os.environ:
             commit_date = datetime.utcfromtimestamp(
