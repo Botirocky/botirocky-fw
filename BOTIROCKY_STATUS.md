@@ -14,9 +14,9 @@
 Forrás-gyűjtemény: UberGuidoZ/Flipper (csak a benign submodule-ok).
 
 ## Következő lépések
-1. A `botirocky_sd/` csomagok bekötése az SD-resource-manifestbe (firmware.scons / assets),
+1. **ITT FOLYTATNI: saját boot/dolphin animáció.** (rajzolt 128x64 pixelart, vagy user PNG-k)
+2. A `botirocky_sd/` csomagok bekötése az SD-resource-manifestbe (firmware.scons / assets),
    vagy curated részhalmaz, hogy ne duzzadjon a flash-csomag.
-2. Saját boot/dolphin animáció.
 3. Kigyomlálás (felesleges beépített appok).
 4. Teljes build + .tgz, majd GitHub-ra push (saját repó URL kell — az origin a Next-Flip, oda nincs push).
 
