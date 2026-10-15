@@ -1,0 +1,16 @@
+App(
+    appid="wifi_recon",
+    name="WiFi Recon (ESP)",
+    apptype=FlipperAppType.EXTERNAL,
+    entry_point="wifi_recon_app",
+    requires=[
+        "gui",
+        "notification",
+    ],
+    stack_size=4 * 1024,
+    fap_category="GPIO",
+    fap_description="Scan nearby WiFi networks via an external ESP32 over UART (GPIO 13/14).",
+    fap_author="Botirocky",
+    fap_version=(1, 0),
+    sources=["*.c"],
+)
