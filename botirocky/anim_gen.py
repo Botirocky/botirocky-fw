@@ -12,6 +12,8 @@ BETUK = {
     "B": ["11110", "10001", "10001", "11110", "10001", "10001", "11110"],
     "C": ["01111", "10000", "10000", "10000", "10000", "10000", "01111"],
     "E": ["11111", "10000", "10000", "11110", "10000", "10000", "11111"],
+    "F": ["11111", "10000", "10000", "11110", "10000", "10000", "10000"],
+    "W": ["10001", "10001", "10001", "10101", "10101", "10101", "01010"],
     "I": ["11111", "00100", "00100", "00100", "00100", "00100", "11111"],
     "K": ["10001", "10010", "10100", "11000", "10100", "10010", "10001"],
     "L": ["10000", "10000", "10000", "10000", "10000", "10000", "11111"],
@@ -84,6 +86,72 @@ def kepkocka(i, rnd, aktiv):
     return img
 
 
+def logo_kocka(i, rnd):
+    img = Image.new("1", (W, H), 1)
+    d = ImageDraw.Draw(img)
+    for _ in range(14):
+        x, y = rnd.randrange(W), rnd.randrange(H)
+        d.point((x, y), fill=0)
+        if rnd.random() < 0.3:
+            d.point((x - 1, y), fill=0)
+            d.point((x + 1, y), fill=0)
+            d.point((x, y - 1), fill=0)
+            d.point((x, y + 1), fill=0)
+    cel_x = (W - 9 * 12) // 2
+    x = W - (W - cel_x) * min(i, 5) // 5
+    d.rectangle([x - 2, 19, x + 9 * 12, 36], fill=1)
+    szoveg(d, x, 21, "BOTIROCKY", 2)
+    if i >= 5:
+        d.rectangle([cel_x, 39, cel_x + 9 * 12 - 3, 39], fill=0)
+    if i >= 6 and i % 2 == 0:
+        szoveg(d, 58, 44, "FW")
+    return img
+
+
+LOGO_META = """Filetype: Flipper Animation
+Version: 1
+
+Width: 128
+Height: 64
+Passive frames: 10
+Active frames: 0
+Frames order: 0 1 2 3 4 5 6 7 8 9
+Active cycles: 0
+Frame rate: 3
+Duration: 3600
+Active cooldown: 0
+
+Bubble slots: 0
+"""
+
+MANIFEST = """Filetype: Flipper Animation Manifest
+Version: 1
+
+Name: BOTIROCKY_RACK
+Min butthurt: 0
+Max butthurt: 18
+Min level: 1
+Max level: 30
+Weight: 5
+
+Name: BOTIROCKY_LOGO
+Min butthurt: 0
+Max butthurt: 18
+Min level: 1
+Max level: 30
+Weight: 3
+"""
+
+
+def ment(cel, kepek, meta):
+    cel.mkdir(parents=True, exist_ok=True)
+    for f in cel.glob("frame_*.png"):
+        f.unlink()
+    for i, k in enumerate(kepek):
+        k.save(cel / f"frame_{i}.png")
+    (cel / "meta.txt").write_text(meta)
+
+
 META = """Filetype: Flipper Animation
 Version: 1
 
@@ -102,21 +170,22 @@ Bubble slots: 0
 
 
 def main():
-    cel = Path(sys.argv[1]) if len(sys.argv) > 1 else Path(__file__).resolve().parent.parent / "assets" / "dolphin" / "external" / "L1_Botirocky_Rack_128x64"
-    cel.mkdir(parents=True, exist_ok=True)
+    gyoker = Path(__file__).resolve().parent.parent / "assets"
     rnd = random.Random(42)
-    kepek = [kepkocka(i, rnd, False) for i in range(8)] + [kepkocka(i, rnd, True) for i in range(4)]
-    for i, k in enumerate(kepek):
-        k.save(cel / f"frame_{i}.png")
-    (cel / "meta.txt").write_text(META)
-    if len(sys.argv) > 2:
-        nagy = [k.convert("L").resize((W * 4, H * 4), Image.NEAREST) for k in kepek]
-        nagy[0].save(sys.argv[2], save_all=True, append_images=nagy[1:], duration=500, loop=0)
+    rack = [kepkocka(i, rnd, False) for i in range(8)] + [kepkocka(i, rnd, True) for i in range(4)]
+    logo = [logo_kocka(i, random.Random(i // 2)) for i in range(10)]
+    ment(gyoker / "dolphin" / "external" / "L1_Botirocky_Rack_128x64", rack, META)
+    csomag = gyoker / "packs" / "Botirocky" / "Anims"
+    ment(csomag / "BOTIROCKY_RACK", rack, META)
+    ment(csomag / "BOTIROCKY_LOGO", logo, LOGO_META)
+    (csomag / "manifest.txt").write_text(MANIFEST)
+    if len(sys.argv) > 1:
+        nagy = [k.convert("L").resize((W * 4, H * 4), Image.NEAREST) for k in logo]
         lap = Image.new("L", (W * 4, H * 4 * 2 + 8), 128)
         lap.paste(nagy[3], (0, 0))
-        lap.paste(nagy[9], (0, H * 4 + 8))
-        lap.save(Path(sys.argv[2]).with_suffix(".png"))
-    print(f"{len(kepek)} képkocka: {cel}")
+        lap.paste(nagy[8], (0, H * 4 + 8))
+        lap.save(sys.argv[1])
+    print(f"rack: {len(rack)}, logo: {len(logo)} képkocka")
 
 
 if __name__ == "__main__":
