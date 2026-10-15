@@ -1,3 +1,18 @@
+# Botirocky FW
+
+A [Momentum](https://github.com/Next-Flip/Momentum-Firmware) Flipper Zero firmware saját változata.
+
+- **Saját arculat:** Botirocky névvel az About-képernyőn és a frissítőcsomag nevében.
+- **Saját animációk:** egy szerverszekrény és egy logó, a [`botirocky/anim_gen.py`](botirocky/anim_gen.py) generálja őket. Benne vannak a gyári animációk között, és egy külön **Botirocky** asset packban is (Momentum Settings → Interface → Graphics → Asset pack).
+- **Saját app:** benne van a `wifi_recon` WiFi-szkenner.
+- **Külön SD-csomag:** a [`botirocky/sd_csomag.sh`](botirocky/sd_csomag.sh) letölti és összecsomagolja a [Flipper-IRDB](https://github.com/logickworkshop/Flipper-IRDB) (~8900 távirányító, CC0) és a [FlipperMusicRTTTL](https://github.com/neverfa11ing/FlipperMusicRTTTL) (~1250 dallam) tartalmát. A kész csomagot az SD-kártya gyökerébe kell kicsomagolni.
+
+Build: `./fbt COMPACT=1 DEBUG=0 updater_package` → `dist/f7-C/*.tgz`. A Flipperre a qFlipper „Install from file” menüjével tölthető fel.
+
+Az alábbiakban az eredeti Momentum-leírás következik.
+
+---
+
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset=".github/assets/logo_dark.png">
